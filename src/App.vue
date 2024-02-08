@@ -1,27 +1,34 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <MyDashboard />
+    <AppCarousel />
+    <AppProducts />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
-
-export default defineComponent({
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-});
+<script lang="ts" setup>
+import AppCarousel from './components/AppCarousel.vue';
+import MyDashboard from './components/MyDashboard.vue';
+import AppProducts from './components/sections/AppProducts.vue';
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-width: 0;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.5rem;
+    font-weight: 400;
+    font-size: 1rem;
+    color: #333333;
 }
+
+/* h2 {
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 2rem;
+    margin-bottom: calc(1.5rem - 16px);
+    font-size: 1.125rem;
+    font-weight: 600;
+} */
 </style>
