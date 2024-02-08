@@ -10,7 +10,9 @@
     </section>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { Ref, ref } from 'vue';
+</script>
 <style scoped>
 .wrapper {
     width: 100%;

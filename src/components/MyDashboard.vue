@@ -37,10 +37,11 @@
 </template>
 
 <script lang="ts" setup>
-import { Ref, ref } from 'vue';
+import { Ref, ref, defineEmits } from 'vue';
 import $ from 'jquery';
 let dropdown_product_selected = ref('');
 
+let product_name = ref('');
 // function getProductSelected() {
 //     console.log(dropdown_product_selected.value);
 // }
@@ -50,28 +51,26 @@ $(document).ready(function () {
     //     console.log('click');
     // });
 
-    $('#dropdown').on('change', function (event) {
-        event.preventDefault(); // Asegúrate de que 'event' esté definido como parámetro
-        var product_id = dropdown_product_selected.value;
-        console.log('aqui empieza la peticion');
-        console.log(product_id);
+    $(document).ready(function () {
+        $('#dropdown').on('change', function (event) {
+            event.preventDefault();
+            var product_id = dropdown_product_selected.value;
 
-        $.ajax({
-            url: '/GetProducts.php',
-            type: 'GET',
-            data: { product_id: product_id },
-            success: function (response) {
-                var data = JSON.parse(response);
-                console.log(data);
-                let dataArray = [];
-                // for (let key in data) {
-                //     dataArray.push(data[key]);
-                // }
-                // fillInputs(dataArray);
-            },
-            error: function (error) {
-                console.error('Error:', error);
-            },
+            $.ajax({
+                url: 'http://localhost/GetProducts.php',
+                type: 'GET',
+                data: { product_id: product_id },
+                success: function (response) {
+                    var data = JSON.parse(response);
+                    console.log(data.name);
+                    $('.product-title').text(data.name);
+                    $('.product-price').text(data.price);
+                    // $('.product-name').text(data.name);
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                },
+            });
         });
     });
 });
