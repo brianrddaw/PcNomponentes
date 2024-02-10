@@ -1,6 +1,6 @@
 <template>
     <header>
-        <img class="logo" src="../assets/logo-pcnomponentes.svg" alt="logo" />
+        <img class="logo" src="../assets/logo-pcnomponentes.svg" alt="logo" @click="reloadPage" />
 
         <select class="products" id="dropdown" v-model="dropdown_product_selected">
             <option class="label" value="" disabled selected hidden>Products</option>
@@ -37,43 +37,40 @@
 </template>
 
 <script lang="ts" setup>
-import { Ref, ref, defineEmits } from 'vue';
+import { Ref, ref } from 'vue';
 import $ from 'jquery';
-let dropdown_product_selected = ref('');
-
-let product_name = ref('');
-// function getProductSelected() {
-//     console.log(dropdown_product_selected.value);
-// }
+let dropdown_product_selected: Ref = ref('');
 
 $(document).ready(function () {
-    // $('.products').click(function () {
-    //     console.log('click');
-    // });
+    $('#dropdown').on('change', function (event) {
+        event.preventDefault();
+        var product_id = dropdown_product_selected.value;
 
-    $(document).ready(function () {
-        $('#dropdown').on('change', function (event) {
-            event.preventDefault();
-            var product_id = dropdown_product_selected.value;
-
-            $.ajax({
-                url: 'http://localhost/GetProducts.php',
-                type: 'GET',
-                data: { product_id: product_id },
-                success: function (response) {
-                    var data = JSON.parse(response);
-                    console.log(data.name);
-                    $('.product-title').text(data.name);
-                    $('.product-price').text(data.price);
-                    // $('.product-name').text(data.name);
-                },
-                error: function (error) {
-                    console.error('Error:', error);
-                },
-            });
+        $.ajax({
+            url: 'http://localhost/GetProducts.php',
+            type: 'GET',
+            data: { product_id: product_id },
+            success: function (response) {
+                var data = JSON.parse(response);
+                $('.product-title, .product-description, .product-price').css('display', 'none');
+                $('.product-title').text(data.title).fadeIn(700);
+                $('.product-description').text(data.description).fadeIn(700);
+                $('.product-price')
+                    .text(data.price + ' €')
+                    .fadeIn(700);
+                console.log(data.src);
+                $('.product_img').css('display', 'none');
+                $('.product-img').attr('src', data.src).fadeIn(700);
+            },
+            error: function (error) {
+                console.error('Error:', error);
+            },
         });
     });
 });
+function reloadPage() {
+    window.location.reload();
+}
 </script>
 
 <style scoped>
@@ -81,7 +78,6 @@ header {
     display: grid;
     grid-template-columns: 0.6fr 1fr 0.7fr;
     align-items: center;
-    /* justify-items: center; */
     border-bottom: 1px solid #cccccc;
     padding-left: 11.25rem;
     padding-right: 11.25rem;
@@ -95,29 +91,24 @@ header {
 }
 
 .products {
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    width: fit-content;
+    width: 10rem;
+    min-width: fit-content;
     padding: 0.7rem;
-    border-radius: 3px;
-    cursor: pointer;
     border: 1px solid #cccccc;
+    border-radius: 3px;
+    background: url('../assets/arrow-down.png') no-repeat right #fff;
+    background-size: 1rem;
+    background-position: 85%;
+    appearance: none;
+    cursor: pointer;
     transition: all 0.2s ease-in-out;
-}
-.products::after {
-    content: '';
-    width: 1rem;
-    height: 1rem;
-    margin-left: 0.5rem;
-    background-image: url(../assets/arrow-down.png);
-    background-size: cover;
 }
 
 .products:hover {
     border-color: black;
     transition: all 0.2s ease-in-out;
 }
+
 .links {
     display: flex;
     justify-content: space-between;
@@ -142,7 +133,6 @@ a {
     cursor: pointer;
     width: 8.125rem;
     padding: 0.8rem 1rem;
-
     border-radius: 3px;
     transition: all 0.2s ease-in-out;
     /* border: 1px solid black; */

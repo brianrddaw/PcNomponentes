@@ -14,7 +14,6 @@
 </template>
 
 <script lang="ts" setup>
-// Definir el tipo de objeto
 type Product = {
     id: string;
     titulo: string;
@@ -22,7 +21,6 @@ type Product = {
     precio: number;
 };
 
-// Crear un array de objetos
 var productsArray: Product[] = [
     {
         id: 'grafica',
@@ -31,16 +29,8 @@ var productsArray: Product[] = [
             'Las GPU NVIDIA® GeForce RTX® serie 40 son más que rápidas para jugadores y creadores. Cuentan con la tecnología de la arquitectura ultra eficiente NVIDIA Ada Lovelace, que ofrece un salto espectacular tanto en rendimiento como en gráficos con tecnología de IA. Disfruta de mundos virtuales realistas con trazado de rayos y juegos con FPS ultra altos y la latencia más baja. Descubre nuevas y revolucionarias formas de crear contenido y una aceleración de flujo de trabajo sin precedentes',
         precio: 679.9,
     },
-    {
-        id: 'monitor',
-        titulo: 'Asus TUF Gaming VG24VQR 23.6" LED FullHD 165Hz FreeSync Premium Curva',
-        descripcion:
-            'El TUF Gaming VG24VQR es un monitor curvo Full HD (1920 x 1080) de 23,6 pulgadas con 165 Hz* de refresco diseñado para gamers profesionales y usuarios que buscan una experiencia gráfica inmersiva. Su impresionante pantalla curva cuenta con Adaptive-Sync (FreeSync™ Premium), una tecnología que evita que ocurran problemas de sincronización de FPS.',
-        precio: 225.0,
-    },
 ];
 
-// Obtener los productos por ID
 function getProducts(productId: string): Product[] {
     return productsArray.filter((producto) => producto.id === productId);
 }
@@ -51,12 +41,13 @@ function getProducts(productId: string): Product[] {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 0.6fr 1fr 1fr;
+    align-items: center;
     max-width: 97.5rem;
     margin: auto;
     height: fit-content;
     max-height: 50vh;
-    min-height: 50vh;
-    padding: 3rem;
+    min-height: 58vh;
+    padding: 2rem;
     gap: 1rem;
     /* border: 1px solid black; */
     border-radius: 15px;
@@ -65,9 +56,17 @@ function getProducts(productId: string): Product[] {
 }
 
 .product-img {
-    border-radius: 15px;
+    place-self: center;
+    scale: 1.2;
     grid-row: span 3;
-    height: 100%;
+    margin-bottom: 4rem;
+    height: 70%;
+    transition: scale 0.2s ease-in-out;
+}
+
+.product-img:hover {
+    scale: 1.2;
+    transition: scale 0.2s ease-in-out;
 }
 
 .product-title {
@@ -77,6 +76,5 @@ function getProducts(productId: string): Product[] {
 
 .product-price {
     font-size: 1.2rem;
-    margin-top: auto;
 }
 </style>

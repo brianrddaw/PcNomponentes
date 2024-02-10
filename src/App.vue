@@ -1,13 +1,16 @@
 <template>
     <MyDashboard />
+    <br />
     <AppCarousel />
     <AppProducts />
+    <AppFooter />
 </template>
 
 <script lang="ts" setup>
 import AppCarousel from './components/AppCarousel.vue';
 import MyDashboard from './components/MyDashboard.vue';
 import AppProducts from './components/sections/AppProducts.vue';
+import AppFooter from './components/AppFooter.vue';
 </script>
 
 <style>
@@ -22,13 +25,4 @@ import AppProducts from './components/sections/AppProducts.vue';
     font-size: 1rem;
     color: #333333;
 }
-
-/* h2 {
-    text-align: center;
-    margin: 0 auto;
-    margin-top: 2rem;
-    margin-bottom: calc(1.5rem - 16px);
-    font-size: 1.125rem;
-    font-weight: 600;
-} */
 </style>

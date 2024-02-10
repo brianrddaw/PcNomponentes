@@ -1,65 +1,137 @@
 <template>
     <section class="wrapper">
         <div class="carousel">
-            <div class="card card-1"></div>
-            <div class="card card-2"></div>
-            <div class="card card-3"></div>
-            <div class="card card-4"></div>
-            <div class="card card-5"></div>
+            <img
+                v-for="product in products"
+                :key="product.id"
+                class="card"
+                :src="product.src"
+                alt="v-text: product.name"
+                :value="product.name"
+                @click="getImgValue(product.name)"
+            />
+        </div>
+        <div class="carousel">
+            <img
+                v-for="product in products"
+                :key="product.id"
+                class="card"
+                :src="product.src"
+                alt="v-text: product.name"
+                :value="product.name"
+                @click="getImgValue(product.name)"
+            />
         </div>
     </section>
 </template>
 
 <script lang="ts" setup>
+import $ from 'jquery';
 import { Ref, ref } from 'vue';
+
+let products: Ref = ref([]);
+
+function getImgValue(productName: string) {
+    var product_id = productName;
+    console.log(product_id);
+    $.ajax({
+        url: 'http://localhost/GetProducts.php',
+        type: 'GET',
+        data: { product_id: product_id },
+        success: function (response) {
+            var data = JSON.parse(response);
+            $('.product-title, .product-description, .product-price').css('display', 'none');
+            $('.product-title').text(data.title).fadeIn(700);
+            $('.product-description').text(data.description).fadeIn(700);
+            $('.product-price')
+                .text(data.price + ' €')
+                .fadeIn(700);
+
+            $('.product_img').css('display', 'none');
+            $('.product-img').attr('src', data.src).fadeIn(700);
+        },
+        error: function (error) {
+            console.error('Error:', error);
+        },
+    });
+}
+$(document).ready(function () {
+    $.ajax({
+        url: 'http://localhost/GetAllProducts.php',
+        type: 'GET',
+
+        success: function (response) {
+            const data = JSON.parse(response);
+
+            // Append new products to the existing array
+            for (var i = 0; i < data.length; i++) {
+                products.value.push(data[i]);
+            }
+        },
+
+        error: function (error) {
+            console.error('Error:', error);
+        },
+    });
+});
 </script>
 <style scoped>
 .wrapper {
-    width: 100%;
+    position: relative;
+    overflow: hidden;
+    padding: 1rem 0;
+    background: white;
+    white-space: nowrap;
 }
 
 .carousel {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    max-width: 97.5rem;
-    margin: auto;
-    height: fit-content;
-    padding: 1rem 0rem;
-    gap: 1rem;
-    /* border: 1px solid black; */
+    display: inline-block;
+    animation: carouselLoop 35s linear infinite;
 }
 
 .card {
-    width: 15rem;
-    height: 15rem;
-    border-radius: 10px;
+    border-radius: 15px;
+    height: 10rem;
     background-size: cover;
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-    /* border: 1px solid red; */
+    margin-right: 15rem;
 }
 
 .card:hover {
-    box-shadow: 0px 0px 10px 0px #cccccc;
+    cursor: pointer;
+    box-shadow: 0px 0px 10px 0px #0d74f3;
     scale: 1.05;
     transition: all 0.2s ease-in-out;
 }
 
-.card-1 {
-    background-image: url(../assets/carousel-img/home.webp);
+.wrapper:hover > .carousel {
+    animation-play-state: paused;
 }
 
-.card-2 {
-    background-image: url(../assets/carousel-img/laptop.webp);
+.wrapper::before,
+.wrapper::after {
+    position: absolute;
+    top: 0;
+    width: 10rem;
+    height: 100%;
+    z-index: 2;
+    content: '';
 }
-.card-3 {
-    background-image: url(../assets/carousel-img/monitor.webp);
+.wrapper::before {
+    left: 0;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0), white);
 }
-.card-4 {
-    background-image: url(../assets/carousel-img/other.webp);
+.wrapper::after {
+    right: 0;
+    background: linear-gradient(to left, white, rgba(255, 255, 255, 0));
 }
-.card-5 {
-    background-image: url(../assets/carousel-img/tv.webp);
+
+@keyframes carouselLoop {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
 }
 </style>
