@@ -1,6 +1,6 @@
 <template>
     <footer>
-        <p>© 2022 PcNomponentes. All rights reserved.</p>
+        <p>© 2024 PcNomponentes. All rights reserved.</p>
         <p>C/ Blanca Rosa, 1</p>
         <p>pcnomponentes@pcnomponentes.com</p>
         <p>+34-699-999-999</p>
@@ -11,14 +11,17 @@
 
 <style scoped>
 footer {
-    position: absolute;
-    display: grid;
+    display: flex;
+    justify-content: space-around;
     bottom: 0;
-    grid-template-columns: repeat(4, 1fr);
     justify-items: center;
     align-items: center;
     width: 100%;
-    height: 5rem;
-    background-color: #f5f5f5;
+    height: 10vh;
+    border-top: 1px solid #cccccc;
+}
+
+footer p {
+    font-size: 1.1rem;
 }
 </style>

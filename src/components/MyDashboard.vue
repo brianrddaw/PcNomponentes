@@ -54,12 +54,10 @@ function logOut() {
 // cambiar entre about us y productos
 const emit = defineEmits(['toggle-register', 'log-out', 'toggle-about-us']);
 const toggleAboutUs = () => {
-    alert('pepe');
     emit('toggle-about-us', true);
 };
 // cambiar entre login y productos
 const toggleRegister = () => {
-    alert('toggleRegister called');
     emit('toggle-register', true);
 };
 
@@ -103,7 +101,7 @@ header {
     border-bottom: 1px solid #cccccc;
     padding-left: 11.25rem;
     padding-right: 11.25rem;
-    height: 5.0625rem;
+    height: 9vh;
 }
 
 .logo {

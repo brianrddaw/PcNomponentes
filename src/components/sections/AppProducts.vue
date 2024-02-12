@@ -44,25 +44,22 @@ function getProducts(productId: string): Product[] {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    max-width: 97.5rem;
+    max-width: 100vw;
     margin: auto;
-    margin-top: 2rem;
     height: fit-content;
-    max-height: 45vh;
-    min-height: 45vh;
-    padding: 1rem;
+    max-height: 60vh;
+    padding: 3rem 10rem;
     gap: 1rem;
-    border-radius: 15px;
     text-align: justify;
     /* background-color: #f5f5f5; */
 }
 
 .product-img {
     place-self: center;
-    scale: 1.5;
     grid-row: span 3;
     margin-bottom: 1rem;
-    height: 70%;
+    scale: 1.5;
+    max-height: 50%;
     transition: scale 0.2s ease-in-out;
 }
 
@@ -74,9 +71,13 @@ function getProducts(productId: string): Product[] {
 .product-title {
     font-size: 1.2rem;
     font-weight: 600;
-    margin-bottom: auto;
+    max-width: 45rem;
+    margin-top: 1rem;
 }
 
+.product-description {
+    max-width: 45rem;
+}
 .product-price {
     font-size: 1.2rem;
 }

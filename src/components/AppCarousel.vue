@@ -82,6 +82,8 @@ $(document).ready(function () {
     background: white;
     white-space: nowrap;
     border-bottom: 1px solid #cccccc;
+    max-height: 21vh;
+    height: 21vh;
 }
 
 .carousel {

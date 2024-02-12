@@ -1,7 +1,7 @@
 <template>
-    <MyDashboard @toggle-register="toggleRegister" />
+    <MyDashboard @toggle-register="toggleRegister" @toggle-about-us="toggleAboutUs" />
     <AppCarousel />
-    <AppAboutUs v-if="appAboutUsState" @toggle-about-us="toggleAboutUs" />
+    <AppAboutUs v-if="appAboutUsState" />
     <AppProducts v-if="appProductsState" />
     <AppLogin v-if="appRegisterState" />
     <AppFooter />

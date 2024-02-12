@@ -102,8 +102,8 @@ function logUser() {
     max-width: 97.5rem;
     margin: auto;
     height: fit-content;
-    max-height: 50vh;
-    min-height: 58vh;
+    max-height: 60vh;
+    min-height: 60vh;
     padding: 2rem;
     gap: 1rem;
     border-radius: 15px;
@@ -113,8 +113,9 @@ function logUser() {
 }
 
 h1 {
+    font-size: 1.5rem;
     text-align: center;
-    text-decoration: underline;
+    font-weight: 600;
     margin-bottom: 1.5rem;
 }
 .container form {
@@ -127,21 +128,21 @@ h1 {
     padding: 1.5rem 2.5rem;
     gap: 1rem;
     border-radius: 8px;
-    border: 1px solid #cccccc;
+    /* border: 1px solid #cccccc; */
 }
 
 form input {
     padding: 0.4rem;
     padding-left: 1rem;
-    border-radius: 0.6rem;
+    border-radius: 0.3rem;
     border: 0px solid transparent;
     background-color: #f5f5f5;
 }
 
 form input:focus {
     outline: none;
-    border: 1px solid #0d74f3;
-    background-color: white;
+    /* border: 1px solid #0d74f3;
+    background-color: white; */
 }
 
 .submit-container {
@@ -165,7 +166,7 @@ form input:focus {
     padding: 0.8rem 1.5rem;
     width: fit-content;
     border: 0px solid transparent;
-    border-radius: 0.6rem;
+    border-radius: 0.3rem;
     background-color: #0d74f3;
     color: white;
     transition: all 0.2s ease-in-out;
