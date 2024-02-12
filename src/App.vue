@@ -1,8 +1,9 @@
 <template>
-    <MyDashboard />
-    <br />
+    <MyDashboard @toggle-register="toggleRegister" />
     <AppCarousel />
-    <AppProducts />
+    <AppAboutUs v-if="appAboutUsState" @toggle-about-us="toggleAboutUs" />
+    <AppProducts v-if="appProductsState" />
+    <AppLogin v-if="appRegisterState" />
     <AppFooter />
 </template>
 
@@ -10,7 +11,48 @@
 import AppCarousel from './components/AppCarousel.vue';
 import MyDashboard from './components/MyDashboard.vue';
 import AppProducts from './components/sections/AppProducts.vue';
+import AppLogin from './components/sections/AppLogin.vue';
+import AppAboutUs from './components/sections/AppAboutUs.vue';
 import AppFooter from './components/AppFooter.vue';
+import { Ref, ref, onMounted } from 'vue';
+import $ from 'jquery';
+
+let logStatus = localStorage.getItem('logStatus');
+if (logStatus) {
+    localStorage.setItem('logStatus', logStatus);
+}
+
+onMounted(() => {
+    console.log(logStatus);
+    if (localStorage && logStatus === 'true') {
+        let userToLog = localStorage.getItem('userLoged');
+        if (userToLog) {
+            $('#user-id').text(userToLog);
+            logStatus = 'true';
+            localStorage.setItem('logStatus', logStatus);
+        } else {
+            $('#user-id').text('My user');
+        }
+    }
+});
+
+let appRegisterState: Ref<boolean> = ref(false);
+let appProductsState: Ref<boolean> = ref(true);
+let appAboutUsState: Ref<boolean> = ref(false);
+
+// cambiar de login a productos
+const toggleRegister = (newState: boolean) => {
+    appRegisterState.value = newState;
+    appProductsState.value = !newState;
+    appAboutUsState.value = !newState;
+};
+
+// cambiar de login a productos
+const toggleAboutUs = (newState: boolean) => {
+    appAboutUsState.value = newState;
+    appRegisterState.value = !newState;
+    appProductsState.value = !newState;
+};
 </script>
 
 <style>

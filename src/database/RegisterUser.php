@@ -6,38 +6,36 @@
     header("Access-Control-Allow-Headers: Content-Type");
 
     // echo 'hola';
+    $conection = 'localhost';
+    $user = 'brian';
+    $database = 'pcnomponentes';
+    $password = 'jack';
 
     // Conectar a la base de datos
-    $conexion = new mysqli('localhost', 'root', '','pcnomponentes');
+    $conexion = new mysqli($conection, $user, $password, $database);
+  
 
     // Verificar conexión
     if ($conexion->connect_error) {
         die('Failed to connect: ' . $conexion->connect_error);
     }
-    
-    // Obtener el ID del usuario desde la URL
-    $product_id = $_GET['product_id'];
 
+    // Obtener el ID del usuario desde la URL
+    $user_name = $_POST['userName'];
+    $user_email = $_POST['userEmail'];
+    $user_password = $_POST['userPassword'];
 
     // Preparar la consulta SQL para buscar el usuario
-    $query = $conexion->prepare("SELECT * FROM products WHERE name = ?;");
-    $query->bind_param("s", $product_id);
+    $query = $conexion->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
+    $query->bind_param("sss", $user_name, $user_email, $user_password);
 
     // Ejecutar la consulta
     $query->execute();
 
     // Obtener los resultados
     $result = $query->get_result();
-    if ($result->num_rows > 0) {
-        // Si hay resultados, enviar los datos del usuario
-        $product = $result->fetch_assoc();
-        
-        echo json_encode($product);
-    } else {
-        // Si no hay resultados, enviar una respuesta vacía
-        echo json_encode(array('error' => 'Usuario no encontrado'));
-    }
 
+    echo ($result);
 
     // Cerrar conexión
     $conexion->close();

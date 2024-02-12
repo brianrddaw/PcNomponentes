@@ -9,7 +9,10 @@
                 {{ getProducts('grafica')[0].descripcion }}
             </p>
         </div>
-        <p class="product-price">{{ getProducts('grafica')[0].precio }} €</p>
+        <div class="product-footer">
+            <p class="product-price">{{ getProducts('grafica')[0].precio }} €</p>
+            <button class="add-to-cart">Add to cart</button>
+        </div>
     </section>
 </template>
 
@@ -40,41 +43,74 @@ function getProducts(productId: string): Product[] {
 .container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 0.6fr 1fr 1fr;
-    align-items: center;
+    grid-template-rows: 1fr 1fr 1fr;
     max-width: 97.5rem;
     margin: auto;
+    margin-top: 2rem;
     height: fit-content;
-    max-height: 50vh;
-    min-height: 58vh;
-    padding: 2rem;
+    max-height: 45vh;
+    min-height: 45vh;
+    padding: 1rem;
     gap: 1rem;
-    /* border: 1px solid black; */
     border-radius: 15px;
-    /* background-color: #f5f5f5; */
     text-align: justify;
+    /* background-color: #f5f5f5; */
 }
 
 .product-img {
     place-self: center;
-    scale: 1.2;
+    scale: 1.5;
     grid-row: span 3;
-    margin-bottom: 4rem;
+    margin-bottom: 1rem;
     height: 70%;
     transition: scale 0.2s ease-in-out;
 }
 
 .product-img:hover {
-    scale: 1.2;
+    scale: 1.6;
     transition: scale 0.2s ease-in-out;
 }
 
 .product-title {
     font-size: 1.2rem;
     font-weight: 600;
+    margin-bottom: auto;
 }
 
 .product-price {
     font-size: 1.2rem;
+}
+
+.product-footer {
+    display: flex;
+    margin-top: auto;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.product-footer p {
+    min-width: 5.375rem;
+}
+
+.product-footer button {
+    margin-right: auto;
+    cursor: pointer;
+    background-color: #0d74f3;
+    border: 1px solid #0d74f3;
+    padding: 0.5rem;
+    border-radius: 5px;
+    color: white;
+    transition: all 0.2s ease-in-out;
+}
+
+.product-footer button:hover {
+    background-color: white;
+    color: #0d74f3;
+    transition: all 0.2s ease-in-out;
+}
+
+.product-footer button:active {
+    scale: 0.98;
 }
 </style>

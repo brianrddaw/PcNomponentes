@@ -12,16 +12,17 @@
         </select>
 
         <nav class="links">
-            <a class="about-us-link" href="">About us</a>
+            <p class="about-us-link" @click="toggleAboutUs">About us</p>
 
-            <div class="user-logo-container">
+            <div class="user-logo-container" @click="toggleRegister">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" enable-background="new 0 0 24 24" class="user-icon">
                     <path
                         d="M12 12c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM20 20h-16v-1c0-3.5 3.3-6 8-6s8 2.5 8 6v1zm-13.8-2h11.7c-.6-1.8-2.8-3-5.8-3s-5.3 1.2-5.9 3z"
                     ></path>
                 </svg>
-                <p>My user</p>
+                <p id="user-id">My user</p>
             </div>
+            <p class="log-out" v-if="logStatus === 'true'" @click="logOut">Log out</p>
             <div class="cart-logo-container">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" enable-background="new 0 0 24 24" class="cart-icon">
                     <path
@@ -37,9 +38,30 @@
 </template>
 
 <script lang="ts" setup>
-import { Ref, ref } from 'vue';
+import { Ref, ref, defineEmits } from 'vue';
 import $ from 'jquery';
+
 let dropdown_product_selected: Ref = ref('');
+let logStatus = localStorage.getItem('logStatus');
+
+// unLog user
+function logOut() {
+    logStatus = 'false';
+    localStorage.setItem('logStatus', logStatus);
+    window.location.reload();
+}
+
+// cambiar entre about us y productos
+const emit = defineEmits(['toggle-register', 'log-out', 'toggle-about-us']);
+const toggleAboutUs = () => {
+    alert('pepe');
+    emit('toggle-about-us', true);
+};
+// cambiar entre login y productos
+const toggleRegister = () => {
+    alert('toggleRegister called');
+    emit('toggle-register', true);
+};
 
 $(document).ready(function () {
     $('#dropdown').on('change', function (event) {
@@ -76,7 +98,7 @@ function reloadPage() {
 <style scoped>
 header {
     display: grid;
-    grid-template-columns: 0.6fr 1fr 0.7fr;
+    grid-template-columns: 0.6fr 0.8fr 0.7fr;
     align-items: center;
     border-bottom: 1px solid #cccccc;
     padding-left: 11.25rem;
@@ -119,10 +141,6 @@ header {
     /* border: 1px solid green; */
 }
 
-a {
-    text-decoration: none;
-}
-
 .about-us-link,
 .cart-logo-container,
 .user-logo-container {
@@ -145,8 +163,25 @@ a {
     transition: all 0.2s ease-in-out;
 }
 
+.log-out {
+    cursor: pointer;
+}
+
+.log-out:hover {
+    color: #0d74f3;
+}
+
 .user-icon,
 .cart-icon {
     width: 1.5rem;
+}
+
+@media screen and (max-width: 1800px) {
+    header {
+        padding-left: 2rem;
+        padding-right: 2rem;
+        grid-template-columns: 0.2fr 0.3fr 0.5fr;
+        justify-items: center;
+    }
 }
 </style>

@@ -33,7 +33,6 @@ let products: Ref = ref([]);
 
 function getImgValue(productName: string) {
     var product_id = productName;
-    console.log(product_id);
     $.ajax({
         url: 'http://localhost/GetProducts.php',
         type: 'GET',
@@ -82,6 +81,7 @@ $(document).ready(function () {
     padding: 1rem 0;
     background: white;
     white-space: nowrap;
+    border-bottom: 1px solid #cccccc;
 }
 
 .carousel {
@@ -98,9 +98,9 @@ $(document).ready(function () {
 
 .card:hover {
     cursor: pointer;
-    box-shadow: 0px 0px 10px 0px #0d74f3;
-    scale: 1.05;
+    scale: 1.1;
     transition: all 0.2s ease-in-out;
+    /* box-shadow: 0px 0px 10px 0px #0d74f3; */
 }
 
 .wrapper:hover > .carousel {
