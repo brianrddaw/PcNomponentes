@@ -13,19 +13,28 @@
                 <input type="submit" class="submit" value="Login" />
             </div>
         </form>
-        <form action="http://localhost/RegisterUser.php" method="post" @submit.prevent="registerUser" v-else>
+        <!-- Name, Id, e-mail, bank account , phone number -->
+        <form class="register-form" action="http://localhost/RegisterUser.php" method="post" @submit.prevent="registerUser" v-else>
             <h1>REGISTER</h1>
+            <label for="id">Id (NIF, DNI, etc)</label>
+            <input type="id" name="id" id="user-id" v-model="userId" />
+
             <label for="email">Email</label>
             <input type="email" name="email" id="email" v-model="userEmail" />
 
-            <label for="username">Username</label>
+            <label for="username">Name</label>
             <input type="text" name="username" id="username" v-model="userName" />
+
+            <label for="phone">Phone</label>
+            <input type="text" name="phone" id="phone" v-model="userPhone" />
+
+            <label for="bankAccount">Bank Account</label>
+            <input type="text" name="bankAccount" id="bankAccount" v-model="userBankAccount" />
 
             <label for="password">Password</label>
             <input type="password" name="password" id="password" v-model="userPassword" />
             <div class="submit-container">
                 <p @click="toggleRegister">Already registered?</p>
-
                 <input type="submit" class="submit" value="Register" />
             </div>
         </form>
@@ -46,6 +55,9 @@ function toggleRegister() {
 let userName: Ref<string> = ref('');
 let userEmail: Ref<string> = ref('');
 let userPassword: Ref<string> = ref('');
+let userId: Ref<string> = ref('');
+let userPhone: Ref<string> = ref('');
+let userBankAccount: Ref<string> = ref('');
 
 // registrar usuario mediante ajax
 function registerUser() {
@@ -56,6 +68,9 @@ function registerUser() {
             userName: userName.value,
             userEmail: userEmail.value,
             userPassword: userPassword.value,
+            userPhone: userPhone.value,
+            userBankAccount: userBankAccount.value,
+            userId: userId.value,
         },
         success: function (response) {
             // Handle successful response
@@ -125,7 +140,7 @@ h1 {
     width: 30%;
     height: 100%;
     min-width: fit-content;
-    padding: 1.5rem 2.5rem;
+    padding: 0rem 2.5rem;
     gap: 1rem;
     border-radius: 8px;
     /* border: 1px solid #cccccc; */
@@ -145,11 +160,37 @@ form input:focus {
     background-color: white; */
 }
 
+.container .register-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    height: fit-content;
+    /* border: 1px solid red; */
+}
+.container .register-form h1 {
+    grid-column: span 2;
+}
+
+.container .register-form input {
+    max-height: 80%;
+    width: 300px;
+    border: 1px solid transparent;
+}
+
+.container .register-form input:hover,
+.container .register-form input:focus {
+    border: 1px solid #0d74f3;
+}
+
 .submit-container {
     display: flex;
     align-items: end;
     margin-top: auto;
     justify-content: space-between;
+    grid-column: span 2;
     /* border: 1px solid red; */
 }
 
@@ -162,9 +203,10 @@ form input:focus {
 
 .submit {
     cursor: pointer;
-
     padding: 0.8rem 1.5rem;
+    max-width: fit-content;
     width: fit-content;
+    max-height: fit-content;
     border: 0px solid transparent;
     border-radius: 0.3rem;
     background-color: #0d74f3;
