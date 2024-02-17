@@ -17,6 +17,13 @@ import AppFooter from './components/AppFooter.vue';
 import { Ref, ref, onMounted } from 'vue';
 import $ from 'jquery';
 
+// languague
+let languague = localStorage.getItem('language');
+if (languague === 'null') {
+    localStorage.setItem('language', 'english');
+}
+
+// log status
 let logStatus = localStorage.getItem('logStatus');
 if (logStatus) {
     localStorage.setItem('logStatus', logStatus);

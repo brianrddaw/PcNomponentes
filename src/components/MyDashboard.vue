@@ -33,6 +33,10 @@
                 </svg>
                 <p>My cart</p>
             </div>
+            <div class="flag-container" @click="changeLanguage">
+                <img src="../assets/english-flag.svg" alt="" v-if="language === 'english'" />
+                <img src="../assets/spanish-flag.svg" alt="" v-else />
+            </div>
         </nav>
     </header>
 </template>
@@ -43,6 +47,7 @@ import $ from 'jquery';
 
 let dropdown_product_selected: Ref = ref('');
 let logStatus = localStorage.getItem('logStatus');
+let language = localStorage.getItem('language');
 
 // unLog user
 function logOut() {
@@ -61,6 +66,15 @@ const toggleRegister = () => {
     emit('toggle-register', true);
 };
 
+function changeLanguage() {
+    if (language === 'english') {
+        localStorage.setItem('language', 'spanish');
+    } else {
+        localStorage.setItem('language', 'english');
+    }
+    window.location.reload();
+}
+
 $(document).ready(function () {
     $('#dropdown').on('change', function (event) {
         event.preventDefault();
@@ -73,8 +87,17 @@ $(document).ready(function () {
             success: function (response) {
                 var data = JSON.parse(response);
                 $('.product-title, .product-description, .product-price').css('display', 'none');
-                $('.product-title').text(data.title).fadeIn(700);
-                $('.product-description').text(data.description).fadeIn(700);
+                switch (language) {
+                    case 'english':
+                        $('.product-title').text(data.title_en).fadeIn(700);
+                        $('.product-description').text(data.description_en).fadeIn(700);
+
+                        break;
+                    case 'spanish':
+                        $('.product-title').text(data.title).fadeIn(700);
+                        $('.product-description').text(data.description).fadeIn(700);
+                        break;
+                }
                 $('.product-price')
                     .text(data.price + ' €')
                     .fadeIn(700);
@@ -96,7 +119,7 @@ function reloadPage() {
 <style scoped>
 header {
     display: grid;
-    grid-template-columns: 0.6fr 0.8fr 0.7fr;
+    grid-template-columns: 0.4fr 0.6fr 0.8fr;
     align-items: center;
     border-bottom: 1px solid #cccccc;
     padding-left: 11.25rem;
@@ -172,6 +195,16 @@ header {
 .user-icon,
 .cart-icon {
     width: 1.5rem;
+}
+
+.flag-container img {
+    width: 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+.flag-container img:hover {
+    scale: 1.2;
+    transition: all 0.2s ease-in-out;
 }
 
 @media screen and (max-width: 1800px) {
