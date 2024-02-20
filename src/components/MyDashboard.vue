@@ -23,7 +23,7 @@
                 <p id="user-id">{{ dashboardLanguage[0][language]['my-user'] }}</p>
             </div>
             <p class="log-out" v-if="logStatus === 'true'" @click="logOut">{{ dashboardLanguage[0][language]['log-out'] }}</p>
-            <div class="cart-logo-container">
+            <div class="cart-logo-container" @click="toggleCart">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" enable-background="new 0 0 24 24" class="cart-icon">
                     <path
                         d="M2 2v2h3.2l2.8 12.2c.1.5.5.8 1 .8h10c.5 0 .9-.3 1-.8l2-8c.1-.3 0-.6-.2-.9-.2-.2-.5-.3-.8-.3h-.4l1.3-2.6c.2-.5.1-1-.3-1.3l-3-2c-.3-.1-.6-.1-.9-.1-.3.1-.5.3-.6.5l-2.1 4.3v-1.8c0-.6-.4-1-1-1h-4c-.6 0-1 .4-1 1v3h-1.1l-.9-4.2c-.1-.5-.5-.8-1-.8h-4zm11 3v2h-2v-2h2zm5.4 2h-1.8l1.8-3.5 1.3.9-1.3 2.6zm-10 2h11.3l-1.5 6h-8.4l-1.4-6z"
@@ -49,10 +49,6 @@ let dropdown_product_selected: Ref = ref('');
 let logStatus = localStorage.getItem('logStatus');
 
 let language = localStorage.getItem('language');
-if (localStorage.getItem('language')) {
-    console.log(language);
-    console.log(typeof language);
-}
 
 let dashboardLanguage = [
     {
@@ -92,13 +88,18 @@ function logOut() {
 }
 
 // cambiar entre about us y productos
-const emit = defineEmits(['toggle-register', 'log-out', 'toggle-about-us']);
+const emit = defineEmits(['toggle-register', 'log-out', 'toggle-about-us', 'toggle-cart']);
 const toggleAboutUs = () => {
     emit('toggle-about-us', true);
 };
 // cambiar entre login y productos
 const toggleRegister = () => {
     emit('toggle-register', true);
+};
+
+// cambiar entre login y productos
+const toggleCart = () => {
+    emit('toggle-cart', true);
 };
 
 function changeLanguage() {

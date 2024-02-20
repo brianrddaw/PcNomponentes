@@ -2,41 +2,53 @@
     <section class="container">
         <img class="product-img" src="../../assets/grafica.webp" alt="" />
         <div>
-            <p class="product-title">{{ getProducts('grafica')[0].titulo }}</p>
+            <p class="product-title" v-if="productsArray.length > 0">{{ productsArray[0].title }}</p>
         </div>
         <div>
-            <p class="product-description">
-                {{ getProducts('grafica')[0].descripcion }}
-            </p>
+            <p class="product-description" v-if="productsArray.length > 0 && language === 'english'">{{ productsArray[0].description_en }}</p>
+            <p class="product-description" v-else-if="productsArray.length > 0 && language === 'spanish'">{{ productsArray[0].description }}</p>
         </div>
         <div class="product-footer">
-            <p class="product-price">{{ getProducts('grafica')[0].precio }} €</p>
+            <p class="product-price" v-if="productsArray.length > 0">{{ productsArray[0].price }} €</p>
             <button class="add-to-cart">Add to cart</button>
         </div>
     </section>
 </template>
 
 <script lang="ts" setup>
-type Product = {
-    id: string;
-    titulo: string;
-    descripcion: string;
-    precio: number;
-};
+import $ from 'jquery';
+import { ref } from 'vue';
 
-var productsArray: Product[] = [
-    {
-        id: 'grafica',
-        titulo: 'Gigabyte GeForce RTX 4070 Windforce OC 12 GB GDDR6X DLSS3',
-        descripcion:
-            'Las GPU NVIDIA® GeForce RTX® serie 40 son más que rápidas para jugadores y creadores. Cuentan con la tecnología de la arquitectura ultra eficiente NVIDIA Ada Lovelace, que ofrece un salto espectacular tanto en rendimiento como en gráficos con tecnología de IA. Disfruta de mundos virtuales realistas con trazado de rayos y juegos con FPS ultra altos y la latencia más baja. Descubre nuevas y revolucionarias formas de crear contenido y una aceleración de flujo de trabajo sin precedentes',
-        precio: 679.9,
-    },
-];
+let language = localStorage.getItem('language');
 
-function getProducts(productId: string): Product[] {
-    return productsArray.filter((producto) => producto.id === productId);
+interface Product {
+    id: number;
+    title: string;
+    title_en: string;
+    description: string;
+    description_en: string;
+    price: number;
 }
+const productsArray = ref<Product[]>([]);
+
+$(document).ready(function () {
+    $.ajax({
+        url: 'http://localhost/pcnomponentes/database/GetAllProducts.php',
+        type: 'GET',
+
+        success: function (response) {
+            const data = JSON.parse(response);
+            for (var i = 0; i < data.length; i++) {
+                productsArray.value.push(data[i]);
+            }
+            console.log(productsArray);
+        },
+
+        error: function (error) {
+            console.error('Error:', error);
+        },
+    });
+});
 </script>
 
 <style scoped>

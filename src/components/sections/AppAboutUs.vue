@@ -3,7 +3,7 @@
         <img src="../../assets/logo-pcnomponentes.svg" alt="" />
         <div class="about-us">
             <h1>ABOUT US</h1>
-            <div class="text-container">
+            <div class="text-container" v-if="language === 'english'">
                 <p>PcNomponentes: Technology at your fingertips. Who are we?, PcNomponentes is your online technology store.</p>
 
                 <p>
@@ -17,9 +17,27 @@
                     PcNomponentes: Your technological universe
                 </p>
             </div>
+            <div class="text-container" v-else>
+                <p>PcNomponentes: Tecnología al alcance de tus manos. ¿Quiénes somos? PcNomponentes es tu tienda de tecnología en línea.</p>
+
+                <p>
+                    Ofrecemos una amplia gama de productos a los mejores precios, con un servicio al cliente excepcional. ¿Qué ofrecemos? En PcNomponentes, encontrarás todo lo que
+                    necesitas para equipar tu hogar, oficina o negocio con la última tecnología.
+                </p>
+                <p>
+                    ¿Por qué elegir PcNomponentes? Precios competitivos, amplio catálogo de productos, servicio al cliente excepcional, envío rápido y seguro y garantía de
+                    satisfacción. <br />
+                    <br />
+                    PcNomponentes: Tu universo tecnológico.
+                </p>
+            </div>
         </div>
     </section>
 </template>
+
+<script lang="ts" setup>
+let language = localStorage.getItem('language');
+</script>
 
 <style scoped>
 img {

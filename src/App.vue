@@ -1,13 +1,15 @@
 <template>
-    <MyDashboard @toggle-register="toggleRegister" @toggle-about-us="toggleAboutUs" />
+    <MyDashboard @toggle-register="toggleRegister" @toggle-about-us="toggleAboutUs" @toggle-cart="toggleCart" />
     <AppCarousel />
     <AppAboutUs v-if="appAboutUsState" />
     <AppProducts v-if="appProductsState" />
     <AppLogin v-if="appRegisterState" />
+    <AppCarrito v-if="appCartState" />
     <AppFooter />
 </template>
 
 <script lang="ts" setup>
+import AppCarrito from './components/sections/AppCarrito.vue';
 import AppCarousel from './components/AppCarousel.vue';
 import MyDashboard from './components/MyDashboard.vue';
 import AppProducts from './components/sections/AppProducts.vue';
@@ -42,20 +44,30 @@ onMounted(() => {
     }
 });
 
-let appRegisterState: Ref<boolean> = ref(false);
 let appProductsState: Ref<boolean> = ref(true);
+let appRegisterState: Ref<boolean> = ref(false);
 let appAboutUsState: Ref<boolean> = ref(false);
+let appCartState: Ref<boolean> = ref(false);
 
 // cambiar de login a productos
 const toggleRegister = (newState: boolean) => {
     appRegisterState.value = newState;
     appProductsState.value = !newState;
     appAboutUsState.value = !newState;
+    appCartState.value = !newState;
 };
 
 // cambiar de login a productos
 const toggleAboutUs = (newState: boolean) => {
     appAboutUsState.value = newState;
+    appRegisterState.value = !newState;
+    appProductsState.value = !newState;
+    appCartState.value = !newState;
+};
+
+const toggleCart = (newState: boolean) => {
+    appCartState.value = newState;
+    appAboutUsState.value = !newState;
     appRegisterState.value = !newState;
     appProductsState.value = !newState;
 };
