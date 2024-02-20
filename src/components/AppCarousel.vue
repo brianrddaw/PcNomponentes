@@ -30,6 +30,7 @@ import $ from 'jquery';
 import { Ref, ref } from 'vue';
 
 let products: Ref = ref([]);
+let language = localStorage.getItem('language');
 
 function getImgValue(productName: string) {
     var product_id = productName;
@@ -40,8 +41,18 @@ function getImgValue(productName: string) {
         success: function (response) {
             var data = JSON.parse(response);
             $('.product-title, .product-description, .product-price').css('display', 'none');
-            $('.product-title').text(data.title).fadeIn(700);
-            $('.product-description').text(data.description).fadeIn(700);
+            switch (language) {
+                case 'english':
+                    $('.product-title').text(data.title_en).fadeIn(700);
+                    $('.product-description').text(data.description_en).fadeIn(700);
+
+                    break;
+                case 'spanish':
+                    $('.product-title').text(data.title).fadeIn(700);
+                    $('.product-description').text(data.description).fadeIn(700);
+
+                    break;
+            }
             $('.product-price')
                 .text(data.price + ' €')
                 .fadeIn(700);
