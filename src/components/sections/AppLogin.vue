@@ -87,7 +87,7 @@ function registerUser() {
 // loguearse
 function logUser() {
     $.ajax({
-        url: 'http://localhost/LogUser.php',
+        url: 'http://localhost/pcnomponentes/database/LogUser.php',
         type: 'POST',
         data: {
             userEmail: userEmail.value,

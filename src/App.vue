@@ -19,7 +19,7 @@ import $ from 'jquery';
 
 // languague
 let languague = localStorage.getItem('language');
-if (languague === 'null') {
+if (!languague) {
     localStorage.setItem('language', 'english');
 }
 
@@ -30,7 +30,6 @@ if (logStatus) {
 }
 
 onMounted(() => {
-    console.log(logStatus);
     if (localStorage && logStatus === 'true') {
         let userToLog = localStorage.getItem('userLoged');
         if (userToLog) {
