@@ -83,6 +83,8 @@ let dashboardLanguage = [
 // unLog user
 function logOut() {
     logStatus = 'false';
+    localStorage.setItem('userLoged', '');
+    localStorage.setItem('userId', '');
     localStorage.setItem('logStatus', logStatus);
     window.location.reload();
 }

@@ -10,7 +10,7 @@
         </div>
         <div class="product-footer">
             <p class="product-price" v-if="productsArray.length > 0">{{ productsArray[0].price }} €</p>
-            <button class="add-to-cart">Add to cart</button>
+            <button class="add-to-cart" @click="addProductToCart()">Add to cart</button>
         </div>
     </section>
 </template>
@@ -41,7 +41,6 @@ $(document).ready(function () {
             for (var i = 0; i < data.length; i++) {
                 productsArray.value.push(data[i]);
             }
-            console.log(productsArray);
         },
 
         error: function (error) {
@@ -49,6 +48,21 @@ $(document).ready(function () {
         },
     });
 });
+
+function addProductToCart() {
+    let product = $('.product-title').text();
+    let userId = localStorage.getItem('userId');
+
+    $.ajax({
+        url: 'http://localhost/pcnomponentes/database/AddProductToCart.php',
+        type: 'POST',
+        data: { product: product, quantity: 1, userId: userId },
+
+        success: function (response) {
+            alert('Product added to cart');
+        },
+    });
+}
 </script>
 
 <style scoped>

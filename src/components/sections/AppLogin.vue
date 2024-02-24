@@ -75,7 +75,6 @@ function registerUser() {
         success: function (response) {
             // Handle successful response
             alert('Usuario creado');
-            console.log(response);
         },
         error: function (error) {
             // Handle error
@@ -97,9 +96,10 @@ function logUser() {
             // Handle successful response
             let data = JSON.parse(response);
             let dataName = data.name;
+            let dataDni = data.dni;
             localStorage.setItem('userLoged', dataName);
+            localStorage.setItem('userId', dataDni);
             localStorage.setItem('logStatus', 'true');
-            console.log(localStorage.getItem('logStatus'));
             $('#user-id').text(dataName);
             window.location.reload();
         },
