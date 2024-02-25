@@ -1,5 +1,5 @@
 <template>
-    <header>
+    <header v-if="language === 'english' || language === 'spanish'">
         <img class="logo" src="../assets/logo-pcnomponentes.svg" alt="logo" @click="reloadPage" />
 
         <select class="products" id="dropdown" v-model="dropdown_product_selected">
@@ -90,7 +90,12 @@ function logOut() {
 }
 
 // cambiar entre about us y productos
-const emit = defineEmits(['toggle-register', 'log-out', 'toggle-about-us', 'toggle-cart']);
+const emit = defineEmits(['toggle-register', 'log-out', 'toggle-about-us', 'toggle-cart', 'toggle-products']);
+
+const toggleProducts = () => {
+    emit('toggle-products', true);
+};
+
 const toggleAboutUs = () => {
     emit('toggle-about-us', true);
 };
@@ -115,6 +120,7 @@ function changeLanguage() {
 
 $(document).ready(function () {
     $('#dropdown').on('change', function (event) {
+        toggleProducts();
         event.preventDefault();
         var product_id = dropdown_product_selected.value;
 

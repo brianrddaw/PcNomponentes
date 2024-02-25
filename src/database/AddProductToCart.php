@@ -17,6 +17,7 @@
     $product = $_POST['product'];
     $quantity = $_POST['quantity'];
     $userId = $_POST['userId'];
+    // $language = $_POST['language'];
 
     // Verificar conexión
     if ($conexion->connect_error) {
@@ -24,18 +25,21 @@
     }
 
 
-    $query = $conexion->prepare("INSERT INTO cart (id_usuario, id_producto, title, price, src, quantity)
-        SELECT
-            u.dni,
-            p.id,
-            p.title,
-            p.price * ? AS price,
-            p.src,
-            ? AS quantity
-        FROM products p
-        INNER JOIN users u ON u.dni = ?
-        WHERE p.title = ?");
-    $query->bind_param("iiss", $quantity, $quantity, $userId, $product);
+    $query = $conexion->prepare("INSERT INTO cart (id_usuario, id_producto, title, title_en, price, src, quantity)
+            SELECT
+                u.dni,
+                p.id,
+                p.title,
+                p.title_en,
+                p.price * ? AS price,
+                p.src,
+                ? AS quantity
+            FROM products p
+            INNER JOIN users u ON u.dni = ?
+            WHERE p.title = ? OR p.title_en = ?");
+    $query->bind_param("disss", $quantity, $quantity, $userId, $product, $product);
+
+
 
 
     // Ejecutar la consulta

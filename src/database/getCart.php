@@ -21,25 +21,32 @@
         die('Failed to connect: ' . $conexion->connect_error);
     }
 
-    // Preparar la consulta SQL para buscar el usuario
-    // $query = $conexion->prepare("SELECT * FROM products WHERE title = '$product' OR title_en = '$product'");
+
     $query = $conexion->prepare("SELECT * FROM cart WHERE id_usuario = ?");
     $query->bind_param("s", $userId);
 
     // Ejecutar la consulta
     $query->execute();
 
-    // Ejecutar la consulta
-    if ($query->execute()) {
-        if ($conexion) {
+    // Obtener resultados
+    $result = $query->get_result();
 
-            $result = $query->get_result();
-            echo json_encode($result);
+    // Verificar si hay resultados
+    if ($result->num_rows > 0) {
+        $rows = array();
+        // Iterar sobre los resultados y agregarlos a un array
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
         }
-
+        // Enviar los resultados como respuesta JSON
+        echo json_encode($rows);
     } else {
-        echo "Error al ejecutar la consulta: " . $query->error;
+        // Si no hay resultados
+        echo json_encode(array()); // Enviar un array vacío como respuesta JSON
     }
+
+    $query->close(); // Cierra la consulta preparada
+
     
 
     // Cerrar conexión

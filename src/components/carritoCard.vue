@@ -2,14 +2,14 @@
     <div class="card">
         <img :src="props.src" alt="pic" />
         <p class="title-text">{{ props.title }}</p>
-        <p v-if="props.price">{{ props.price * quantity !== 0 ? (props.price * quantity).toFixed(2) : 0 }} €</p>
+        <p class="price" v-if="props.price">{{ props.price * quantity !== 0 ? (props.price * quantity).toFixed(2) : 0 }} €</p>
 
         <div class="counter">
             <span class="decrement" @click="decrement">-</span>
             <span>{{ quantity }}</span>
             <span class="increment" @click="increment">+</span>
         </div>
-        <img class="delete" src="../assets/x.svg" v-if="props.id" @click="deleteProductFromCart(props.id)" />
+        <img class="delete" src="../assets/x.svg" v-if="props.id" @click="deleteProductFromCart(props.id, $event)" />
     </div>
 </template>
 
@@ -38,9 +38,9 @@ function increment() {
     quantity.value++;
 }
 
-function deleteProductFromCart(productId: any) {
+function deleteProductFromCart(productId: any, event: any) {
     let userId = localStorage.getItem('userId');
-    alert(productId);
+    let $this = $(event.currentTarget);
     $.ajax({
         url: 'http://localhost/pcnomponentes/database/deleteProductFromCart.php',
         type: 'POST',
@@ -48,6 +48,7 @@ function deleteProductFromCart(productId: any) {
 
         success: function (response) {
             console.log(response);
+            $this.closest('.card').fadeOut(300);
         },
         error: function (error) {
             console.error('Error:', error);
@@ -60,8 +61,8 @@ function deleteProductFromCart(productId: any) {
 .card {
     display: flex;
     align-items: center;
-    min-width: fit-content;
-    width: fit-content;
+    /* min-width: fit-content; */
+    width: 30rem;
     gap: 1rem;
     padding: 1rem;
     background-color: #fcfcfc;
@@ -78,8 +79,8 @@ function deleteProductFromCart(productId: any) {
     width: 565px;
 }
 
-.card p {
-    max-width: 300px;
+.title-text {
+    max-width: 150px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -87,6 +88,11 @@ function deleteProductFromCart(productId: any) {
 
 p {
     user-select: none;
+}
+
+.price {
+    text-align: justify;
+    min-width: 4.5rem;
 }
 
 .counter {
@@ -100,10 +106,15 @@ p {
 .decrement,
 .increment {
     cursor: pointer;
+    text-align: justify;
 }
 
 .delete {
     max-width: 0.8rem;
+}
+
+.delete:hover {
+    filter: brightness(0) saturate(100%) invert(11%) sepia(97%) saturate(7497%) hue-rotate(4deg) brightness(98%) contrast(118%);
 }
 
 * {

@@ -27,13 +27,20 @@
 
 <script lang="ts" setup>
 import $ from 'jquery';
-import { Ref, ref } from 'vue';
+import { Ref, ref, defineEmits } from 'vue';
 
 let products: Ref = ref([]);
 let language = localStorage.getItem('language');
 
+// cambiar a productos
+const emit = defineEmits(['toggle-products']);
+const toggleProducts = () => {
+    emit('toggle-products', true);
+};
+
 function getImgValue(productName: string) {
     var product_id = productName;
+    toggleProducts();
     $.ajax({
         url: 'http://localhost/pcnomponentes/database/GetProducts.php',
         type: 'GET',

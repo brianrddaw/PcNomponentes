@@ -21,13 +21,16 @@
     }
 
     // Obtener el ID del usuario desde la URL
-    $user_name = $_POST['userName'];
+    $user_id = $_POST['userId'];
     $user_email = $_POST['userEmail'];
     $user_password = $_POST['userPassword'];
+    $user_phone = $_POST['userPhone'];
+    $user_bank_account = $_POST['userBankAccount'];
+    $user_name = $_POST['userName'];
 
     // Preparar la consulta SQL para buscar el usuario
-    $query = $conexion->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-    $query->bind_param("sss", $user_name, $user_email, $user_password);
+    $query = $conexion->prepare("INSERT INTO users (dni, email, password, phone_number, bank_account, name) VALUES (?, ?, ?, ?, ?, ?)");
+    $query->bind_param("ssssss", $user_id, $user_email, $user_password, $user_phone, $user_bank_account, $user_name);
 
     // Ejecutar la consulta
     $query->execute();

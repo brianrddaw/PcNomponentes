@@ -1,6 +1,6 @@
 <template>
-    <MyDashboard @toggle-register="toggleRegister" @toggle-about-us="toggleAboutUs" @toggle-cart="toggleCart" />
-    <AppCarousel />
+    <MyDashboard @toggle-register="toggleRegister" @toggle-about-us="toggleAboutUs" @toggle-cart="toggleCart" @toggle-products="toggleProducts" />
+    <AppCarousel @toggle-products="toggleProducts" />
     <AppAboutUs v-if="appAboutUsState" />
     <AppProducts v-if="appProductsState" />
     <AppLogin v-if="appRegisterState" />
@@ -48,6 +48,14 @@ let appProductsState: Ref<boolean> = ref(true);
 let appRegisterState: Ref<boolean> = ref(false);
 let appAboutUsState: Ref<boolean> = ref(false);
 let appCartState: Ref<boolean> = ref(false);
+
+// cambiar a productos
+const toggleProducts = (newState: boolean) => {
+    appProductsState.value = newState;
+    appAboutUsState.value = !newState;
+    appRegisterState.value = !newState;
+    appCartState.value = !newState;
+};
 
 // cambiar de login a productos
 const toggleRegister = (newState: boolean) => {

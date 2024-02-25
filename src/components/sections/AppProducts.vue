@@ -52,12 +52,12 @@ $(document).ready(function () {
 function addProductToCart() {
     let product = $('.product-title').text();
     let userId = localStorage.getItem('userId');
+    let language = localStorage.getItem('language');
 
     $.ajax({
         url: 'http://localhost/pcnomponentes/database/AddProductToCart.php',
         type: 'POST',
-        data: { product: product, quantity: 1, userId: userId },
-
+        data: { product: product, quantity: 1, userId: userId, language: language },
         success: function (response) {
             alert('Product added to cart');
         },
