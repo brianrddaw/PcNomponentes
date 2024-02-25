@@ -3,17 +3,23 @@
         <div class="carrito">
             <div class="cards-container">
                 <carritoCard
+                    v-if="cartProducts.length > 0"
                     v-for="product in cartProducts"
                     :key="product.id"
                     :title="language === 'spanish' ? product.title : product.title_en"
                     :price="product.price"
                     :src="product.src"
                     :id="product.id_producto"
+                    :cantidad="product.quantity"
                 />
+                <p v-else>No hay productos en el carrito</p>
             </div>
         </div>
         <div class="total">
-            <h1>aqui va el total</h1>
+            <div class="buy-container">
+                <p>TOTAL</p>
+                <p id="totalPrice">{{ totalPrice.toFixed(2) }}</p>
+            </div>
         </div>
     </section>
 </template>
@@ -23,8 +29,9 @@ import $ from 'jquery';
 import carritoCard from '../carritoCard.vue';
 import { ref, Ref } from 'vue';
 
-let cartProducts: Ref = ref([]);
 let language = localStorage.getItem('language');
+let cartProducts: Ref = ref([]);
+let totalPrice: Ref<number> = ref(0);
 
 $(document).ready(function () {
     let userId = localStorage.getItem('userId');
@@ -37,8 +44,8 @@ $(document).ready(function () {
             const data = JSON.parse(response);
             cartProducts.value = data;
 
-            for (var i = 0; i < cartProducts.value.length; i++) {
-                console.log(cartProducts.value[i]);
+            for (let i = 0; i < data.length; i++) {
+                totalPrice.value += parseFloat(data[i].price) * data[i].quantity;
             }
         },
     });
@@ -83,7 +90,10 @@ $(document).ready(function () {
 }
 
 .total {
-    /* border: 1px solid blue; */
+    display: flex;
+    justify-content: center;
+    border: 1px solid blue;
+    padding: 4rem;
     width: 100%;
 }
 

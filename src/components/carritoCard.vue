@@ -2,7 +2,7 @@
     <div class="card">
         <img :src="props.src" alt="pic" />
         <p class="title-text">{{ props.title }}</p>
-        <p class="price" v-if="props.price">{{ props.price * quantity !== 0 ? (props.price * quantity).toFixed(2) : 0 }} €</p>
+        <p class="price" v-if="props.price">{{ price * quantity !== 0 ? (price * quantity).toFixed(2) : 0 }} €</p>
 
         <div class="counter">
             <span class="decrement" @click="decrement">-</span>
@@ -15,8 +15,7 @@
 
 <script lang="ts" setup>
 import $ from 'jquery';
-import { ref } from 'vue';
-import { defineProps } from 'vue';
+import { Ref, ref, defineProps } from 'vue';
 
 const props = defineProps({
     id: Number,
@@ -26,19 +25,37 @@ const props = defineProps({
     cantidad: Number,
 });
 
-let quantity = ref(1);
+let quantity: Ref<number> = ref(props.cantidad || 0);
+let price: Ref<number> = ref(props.price || 0);
+
+const userId = localStorage.getItem('userId');
+const productId = props.id;
 
 function decrement() {
-    if (quantity.value > 0) {
-        quantity.value--;
-    }
+    if (quantity.value <= 1) return;
+    quantity.value--;
+    $.ajax({
+        url: 'http://localhost/pcnomponentes/database/incrementQuantity.php',
+        type: 'POST',
+        data: { productId: productId, quantity: quantity.value, userId: userId },
+    });
 }
 
 function increment() {
     quantity.value++;
+    $.ajax({
+        url: 'http://localhost/pcnomponentes/database/incrementQuantity.php',
+        type: 'POST',
+        data: { productId: productId, quantity: quantity.value, userId: userId },
+    });
 }
 
-function deleteProductFromCart(productId: any, event: any) {
+// function updateTotalPrice() {
+//     if (!props.price) return;
+//     totalPrice.value = props.price * quantity.value;
+//     $('#totalPrice').text(totalPrice.value.toFixed(2) + ' €');
+// }
+function deleteProductFromCart(productId: Number, event: any) {
     let userId = localStorage.getItem('userId');
     let $this = $(event.currentTarget);
     $.ajax({
