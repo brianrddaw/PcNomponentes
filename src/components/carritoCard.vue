@@ -15,8 +15,17 @@
 
 <script lang="ts" setup>
 import $ from 'jquery';
-import { Ref, ref, defineProps } from 'vue';
+import { Ref, ref, defineProps, defineEmits } from 'vue';
 
+// update cart emit function
+const emit = defineEmits(['update-cart-price']);
+
+// This code snippet defines a function called updateCartPrice in a Vue component. When called, it emits an event named 'update-cart-price'.
+const updateCartPrice = () => {
+    emit('update-cart-price');
+};
+
+// props definition
 const props = defineProps({
     id: Number,
     title: String,
@@ -25,12 +34,15 @@ const props = defineProps({
     cantidad: Number,
 });
 
+// quantity and price variables
 let quantity: Ref<number> = ref(props.cantidad || 0);
 let price: Ref<number> = ref(props.price || 0);
 
+// userId and productId variables
 const userId = localStorage.getItem('userId');
 const productId = props.id;
 
+// This code defines a function called "decrement" which decreases the quantity value by 1 and makes an AJAX POST request to update the quantity in the database. It also calls the "updateCartPrice" function.
 function decrement() {
     if (quantity.value <= 1) return;
     quantity.value--;
@@ -39,7 +51,10 @@ function decrement() {
         type: 'POST',
         data: { productId: productId, quantity: quantity.value, userId: userId },
     });
+    updateCartPrice();
 }
+
+// This code defines a function called increment which increases the value of quantity, makes an AJAX request to increment the quantity in the database, and then calls updateCartPrice.
 
 function increment() {
     quantity.value++;
@@ -48,13 +63,11 @@ function increment() {
         type: 'POST',
         data: { productId: productId, quantity: quantity.value, userId: userId },
     });
+    updateCartPrice();
 }
 
-// function updateTotalPrice() {
-//     if (!props.price) return;
-//     totalPrice.value = props.price * quantity.value;
-//     $('#totalPrice').text(totalPrice.value.toFixed(2) + ' €');
-// }
+// This code defines a function called deleteProductFromCart in a Vue component. It makes an AJAX request to a local server to delete a product from the user's cart using the product ID and the user ID retrieved from the local storage. Upon success, it fades out the product card and updates the cart price. If there's an error, it logs the error to the console.
+
 function deleteProductFromCart(productId: Number, event: any) {
     let userId = localStorage.getItem('userId');
     let $this = $(event.currentTarget);
@@ -64,8 +77,8 @@ function deleteProductFromCart(productId: Number, event: any) {
         data: { productId: productId, userId: userId },
 
         success: function (response) {
-            console.log(response);
             $this.closest('.card').fadeOut(300);
+            updateCartPrice();
         },
         error: function (error) {
             console.error('Error:', error);
@@ -78,7 +91,6 @@ function deleteProductFromCart(productId: Number, event: any) {
 .card {
     display: flex;
     align-items: center;
-    /* min-width: fit-content; */
     width: 30rem;
     gap: 1rem;
     padding: 1rem;
@@ -110,6 +122,7 @@ p {
 .price {
     text-align: justify;
     min-width: 4.5rem;
+    font-variant-numeric: tabular-nums;
 }
 
 .counter {
@@ -117,7 +130,6 @@ p {
     justify-content: space-around;
     width: 5rem;
     margin: auto;
-    /* border: 1px solid red; */
 }
 
 .decrement,

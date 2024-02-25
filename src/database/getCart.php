@@ -22,7 +22,7 @@
     }
 
 
-    $query = $conexion->prepare("SELECT * FROM cart WHERE id_usuario = ?");
+   $query = $conexion->prepare("SELECT * FROM cart WHERE id_usuario = ?");
     $query->bind_param("s", $userId);
 
     // Ejecutar la consulta
@@ -35,7 +35,7 @@
     if ($result->num_rows > 0) {
         $rows = array();
         // Iterar sobre los resultados y agregarlos a un array
-        while ($row = $result->fetch_assoc()) {
+        while ($row = mysqli_fetch_assoc($result)) {
             $rows[] = $row;
         }
         // Enviar los resultados como respuesta JSON

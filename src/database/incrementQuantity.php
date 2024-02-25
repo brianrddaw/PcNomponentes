@@ -14,7 +14,7 @@
     $conexion = new mysqli($conection, $user, $password, $database);
 
 
-    $product = $_POST['product'];
+    $product = $_POST['productId'];
     $quantity = $_POST['quantity'];
     $userId = $_POST['userId'];
     // $language = $_POST['language'];
@@ -26,21 +26,16 @@
 
 
     $query = $conexion->prepare("UPDATE cart
-        SET quantity = quantity + ?
+        SET quantity =  ?
         WHERE id_usuario = (SELECT dni FROM users WHERE dni = ?)
-        AND id_producto = (SELECT id FROM products WHERE title = ? OR title_en = ?)");
-    $query->bind_param("diss", $quantity, $userId, $product, $product);
-
-
-
+        AND id_producto = ?");
+    $query->bind_param("isi", $quantity, $userId, $product);
 
 
     // Ejecutar la consulta
     if ($query->execute()) {
         if ($conexion->affected_rows > 0) {
             echo "Producto agregado al carrito";
-        } else {
-            echo "La consulta se ejecutó correctamente pero no se insertó ningún registro.";
         }
     } else {
         echo "Error al ejecutar la consulta: " . $query->error;

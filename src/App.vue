@@ -31,6 +31,8 @@ if (logStatus) {
     localStorage.setItem('logStatus', logStatus);
 }
 
+// The code snippet is a Vue.js lifecycle hook onMounted that executes when the component is mounted to the DOM. It checks if localStorage is available and if logStatus is 'true'. If both conditions are met, it attempts to retrieve the userLoged item from localStorage. If userLoged is found, it updates the text of the HTML element with the id user-id with the userToLog value, sets logStatus to 'true', and saves it to localStorage. If userLoged is not found, it sets the text of the user-id element to 'My user'.
+
 onMounted(() => {
     if (localStorage && logStatus === 'true') {
         let userToLog = localStorage.getItem('userLoged');
@@ -44,12 +46,13 @@ onMounted(() => {
     }
 });
 
+// states
 let appProductsState: Ref<boolean> = ref(true);
 let appRegisterState: Ref<boolean> = ref(false);
 let appAboutUsState: Ref<boolean> = ref(false);
 let appCartState: Ref<boolean> = ref(false);
 
-// cambiar a productos
+// switch to products section
 const toggleProducts = (newState: boolean) => {
     appProductsState.value = newState;
     appAboutUsState.value = !newState;
@@ -57,7 +60,7 @@ const toggleProducts = (newState: boolean) => {
     appCartState.value = !newState;
 };
 
-// cambiar de login a productos
+// switch to register
 const toggleRegister = (newState: boolean) => {
     appRegisterState.value = newState;
     appProductsState.value = !newState;
@@ -65,7 +68,7 @@ const toggleRegister = (newState: boolean) => {
     appCartState.value = !newState;
 };
 
-// cambiar de login a productos
+// switch to about us
 const toggleAboutUs = (newState: boolean) => {
     appAboutUsState.value = newState;
     appRegisterState.value = !newState;
@@ -73,11 +76,16 @@ const toggleAboutUs = (newState: boolean) => {
     appCartState.value = !newState;
 };
 
+// switch to cart
 const toggleCart = (newState: boolean) => {
-    appCartState.value = newState;
-    appAboutUsState.value = !newState;
-    appRegisterState.value = !newState;
-    appProductsState.value = !newState;
+    if (localStorage && logStatus === 'false') {
+        toggleRegister(newState);
+    } else {
+        appCartState.value = newState;
+        appAboutUsState.value = !newState;
+        appRegisterState.value = !newState;
+        appProductsState.value = !newState;
+    }
 };
 </script>
 

@@ -45,11 +45,12 @@
 import { Ref, ref, defineEmits } from 'vue';
 import $ from 'jquery';
 
+// variables definition
 let dropdown_product_selected: Ref = ref('');
 let logStatus = localStorage.getItem('logStatus');
-
 let language = localStorage.getItem('language');
 
+// language dictionary
 let dashboardLanguage = [
     {
         spanish: {
@@ -89,7 +90,7 @@ function logOut() {
     window.location.reload();
 }
 
-// cambiar entre about us y productos
+// emits we'll need to swicth between components
 const emit = defineEmits(['toggle-register', 'log-out', 'toggle-about-us', 'toggle-cart', 'toggle-products']);
 
 const toggleProducts = () => {
@@ -109,6 +110,8 @@ const toggleCart = () => {
     emit('toggle-cart', true);
 };
 
+// This code defines a function called changeLanguage that toggles the language setting between English and Spanish in the browser's local storage and then reloads the page.
+
 function changeLanguage() {
     if (language === 'english') {
         localStorage.setItem('language', 'spanish');
@@ -118,42 +121,47 @@ function changeLanguage() {
     window.location.reload();
 }
 
+// When the document is ready, this code sets up an event listener for changes on the element with the id #dropdown. Upon a change, it retrieves the selected product ID, calls a function named toggleProducts, and then sends an asynchronous GET request to 'GetProducts.php' with the product ID. If the request succeeds, it updates the page with the product's title, description, price, and image source, with different text depending on the current language setting. The product information fades in with a 700-millisecond animation. If the request fails, it logs an error to the console.
+
 $(document).ready(function () {
-    $('#dropdown').on('change', function (event) {
-        toggleProducts();
-        event.preventDefault();
+    $('#dropdown').on('change', function () {
         var product_id = dropdown_product_selected.value;
+        toggleProducts();
+        setTimeout(() => {
+            $.ajax({
+                url: 'http://localhost/pcnomponentes/database/GetProducts.php',
+                type: 'GET',
+                data: { product_id: product_id },
+                success: function (response) {
+                    var data = JSON.parse(response);
+                    $('.product-title, .product-description, .product-price').css('display', 'none');
+                    switch (language) {
+                        case 'english':
+                            $('.product-title').text(data.title_en).fadeIn(700);
+                            $('.product-description').text(data.description_en).fadeIn(700);
 
-        $.ajax({
-            url: 'http://localhost/pcnomponentes/database/GetProducts.php',
-            type: 'GET',
-            data: { product_id: product_id },
-            success: function (response) {
-                var data = JSON.parse(response);
-                $('.product-title, .product-description, .product-price').css('display', 'none');
-                switch (language) {
-                    case 'english':
-                        $('.product-title').text(data.title_en).fadeIn(700);
-                        $('.product-description').text(data.description_en).fadeIn(700);
-
-                        break;
-                    case 'spanish':
-                        $('.product-title').text(data.title).fadeIn(700);
-                        $('.product-description').text(data.description).fadeIn(700);
-                        break;
-                }
-                $('.product-price')
-                    .text(data.price + ' €')
-                    .fadeIn(700);
-                $('.product_img').css('display', 'none');
-                $('.product-img').attr('src', data.src).fadeIn(700);
-            },
-            error: function (error) {
-                console.error('Error:', error);
-            },
-        });
+                            break;
+                        case 'spanish':
+                            $('.product-title').text(data.title).fadeIn(700);
+                            $('.product-description').text(data.description).fadeIn(700);
+                            break;
+                    }
+                    $('.product-price')
+                        .text(data.price + ' €')
+                        .fadeIn(700);
+                    $('.product_img').css('display', 'none');
+                    $('.product-img').attr('src', data.src).fadeIn(700);
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                },
+            });
+        }, 30);
     });
 });
+
+// This code snippet defines a function called reloadPage that simply reloads the current page when called.
+
 function reloadPage() {
     window.location.reload();
 }
@@ -173,7 +181,6 @@ header {
 .logo {
     max-width: 8rem;
     cursor: pointer;
-    /* border: 1px solid red; */
 }
 
 .products {
@@ -202,7 +209,6 @@ header {
     align-items: center;
     width: 100%;
     height: 100%;
-    /* border: 1px solid green; */
 }
 
 .about-us-link,
@@ -217,7 +223,6 @@ header {
     padding: 0.8rem 1rem;
     border-radius: 3px;
     transition: all 0.2s ease-in-out;
-    /* border: 1px solid black; */
 }
 
 .about-us-link:hover,

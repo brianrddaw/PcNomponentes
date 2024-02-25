@@ -36,6 +36,7 @@
 </template>
 
 <script lang="ts" setup>
+// language variable
 let language = localStorage.getItem('language');
 </script>
 
@@ -56,16 +57,12 @@ img {
     min-height: 60vh;
     padding: 1rem 10rem;
     text-align: justify;
-    /* border-top: 1px solid #cccccc; */
-    /* border-bottom: 1px solid #cccccc; */
-    /* background-color: #f5f5f5; */
 }
 .about-us {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 3rem;
-    /* border: 1px solid red; */
     padding: 2rem 0rem;
     padding-right: 0;
     height: 100%;
@@ -78,7 +75,6 @@ h1 {
     font-weight: 700;
     font-size: 3rem;
     height: fit-content;
-    /* border: 1px solid blue; */
 }
 
 .text-container {
@@ -95,6 +91,5 @@ p {
     height: fit-content;
     text-align: justify;
     max-width: 60%;
-    /* border: 1px solid green; */
 }
 </style>

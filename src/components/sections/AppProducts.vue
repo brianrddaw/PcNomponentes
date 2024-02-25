@@ -10,7 +10,9 @@
         </div>
         <div class="product-footer">
             <p class="product-price" v-if="productsArray.length > 0">{{ productsArray[0].price }} €</p>
-            <button class="add-to-cart" @click="addProductToCart()">Add to cart</button>
+
+            <button class="add-to-cart" @click="addProductToCart()" v-if="language === 'english'">Add to cart</button>
+            <button class="add-to-cart" @click="addProductToCart()" v-else>Añadir al carrito</button>
         </div>
     </section>
 </template>
@@ -21,6 +23,8 @@ import { ref } from 'vue';
 
 let language = localStorage.getItem('language');
 
+// The Product interface defines the structure of a product object with properties id, title, title_en, description, description_en, and price.
+// Each property has a specific data type: id is a number, title and title_en are strings, description and description_en are strings, and price is a number.
 interface Product {
     id: number;
     title: string;
@@ -31,6 +35,7 @@ interface Product {
 }
 const productsArray = ref<Product[]>([]);
 
+// This code defines an AJAX request to retrieve all products from the database using jQuery's $.ajax method. It then updates the productsArray value with the retrieved data.
 $(document).ready(function () {
     $.ajax({
         url: 'http://localhost/pcnomponentes/database/GetAllProducts.php',
@@ -49,6 +54,7 @@ $(document).ready(function () {
     });
 });
 
+// This code defines a function called addProductToCart that sends an AJAX request to the server to add a product to the cart. It uses the product name, quantity, userId, and language as parameters.
 function addProductToCart() {
     let product = $('.product-title').text();
     let userId = localStorage.getItem('userId');
@@ -59,7 +65,11 @@ function addProductToCart() {
         type: 'POST',
         data: { product: product, quantity: 1, userId: userId, language: language },
         success: function (response) {
-            alert('Product added to cart');
+            if (language === 'english') {
+                alert('Product added to cart');
+            } else {
+                alert('Producto agregado al carrito');
+            }
         },
     });
 }
@@ -77,7 +87,6 @@ function addProductToCart() {
     padding: 3rem 10rem;
     gap: 1rem;
     text-align: justify;
-    /* background-color: #f5f5f5; */
 }
 
 .product-img {

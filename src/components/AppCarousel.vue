@@ -32,55 +32,48 @@ import { Ref, ref, defineEmits } from 'vue';
 let products: Ref = ref([]);
 let language = localStorage.getItem('language');
 
-// cambiar a productos
+// switch to products section logic
 const emit = defineEmits(['toggle-products']);
 const toggleProducts = () => {
     emit('toggle-products', true);
 };
 
+// This code defines a function getImgValue that makes an asynchronous AJAX request to fetch product data and then updates the UI with the received data. It also uses a timer to delay the AJAX request by 30 milliseconds.
 function getImgValue(productName: string) {
     var product_id = productName;
     toggleProducts();
-    $.ajax({
-        url: 'http://localhost/pcnomponentes/database/GetProducts.php',
-        type: 'GET',
-        data: { product_id: product_id },
-        success: function (response) {
-            var data = JSON.parse(response);
-            $('.product-title, .product-description, .product-price').css('display', 'none');
-            switch (language) {
-                case 'english':
-                    $('.product-title').text(data.title_en).fadeIn(700);
-                    $('.product-description').text(data.description_en).fadeIn(700);
-                    break;
-                case 'spanish':
-                    $('.product-title').text(data.title).fadeIn(700);
-                    $('.product-description').text(data.description).fadeIn(700);
-                    break;
-            }
-            switch (language) {
-                case 'english':
-                    $('.product-title').text(data.title_en).fadeIn(700);
-                    $('.product-description').text(data.description_en).fadeIn(700);
 
-                    break;
-                case 'spanish':
-                    $('.product-title').text(data.title).fadeIn(700);
-                    $('.product-description').text(data.description).fadeIn(700);
+    setTimeout(() => {
+        $.ajax({
+            url: 'http://localhost/pcnomponentes/database/GetProducts.php',
+            type: 'GET',
+            data: { product_id: product_id },
+            success: function (response) {
+                var data = JSON.parse(response);
+                $('.product-title, .product-description, .product-price').css('display', 'none');
+                switch (language) {
+                    case 'english':
+                        $('.product-title').text(data.title_en).fadeIn(700);
+                        $('.product-description').text(data.description_en).fadeIn(700);
+                        break;
+                    case 'spanish':
+                        $('.product-title').text(data.title).fadeIn(700);
+                        $('.product-description').text(data.description).fadeIn(700);
+                        break;
+                }
 
-                    break;
-            }
-            $('.product-price')
-                .text(data.price + ' €')
-                .fadeIn(700);
+                $('.product-price')
+                    .text(data.price + ' €')
+                    .fadeIn(700);
 
-            $('.product_img').css('display', 'none');
-            $('.product-img').attr('src', data.src).fadeIn(700);
-        },
-        error: function (error) {
-            console.error('Error:', error);
-        },
-    });
+                $('.product_img').css('display', 'none');
+                $('.product-img').attr('src', data.src).fadeIn(700);
+            },
+            error: function (error) {
+                console.error('Error:', error);
+            },
+        });
+    }, 30);
 }
 $(document).ready(function () {
     $.ajax({
@@ -130,7 +123,6 @@ $(document).ready(function () {
     cursor: pointer;
     scale: 1.1;
     transition: all 0.2s ease-in-out;
-    /* box-shadow: 0px 0px 10px 0px #0d74f3; */
 }
 
 .wrapper:hover > .carousel {

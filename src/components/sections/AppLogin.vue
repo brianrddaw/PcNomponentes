@@ -1,41 +1,45 @@
 <template>
-    <section class="container">
+    <section class="container" v-if="language === 'english' || language === 'spanish'">
         <form action="" v-if="!register" @submit.prevent="logUser">
-            <h1>LOGIN</h1>
-            <label for="email">Email</label>
+            <h1>{{ languageDictionary[language].login }}</h1>
+            <label for="email">{{ languageDictionary[language].email }}</label>
             <input type="email" name="email" id="email" v-model="userEmail" />
 
-            <label for="password">Password</label>
+            <label for="password">{{ languageDictionary[language].password }}</label>
             <input type="password" name="password" id="password" v-model="userPassword" />
             <div class="submit-container">
-                <p @click="toggleRegister">Not registered yet?</p>
+                <p @click="toggleRegister">{{ languageDictionary[language].register }}</p>
 
-                <input type="submit" class="submit" value="Login" />
+                <input type="submit" class="submit" value="Login" v-if="language === 'english'" />
+                <input type="submit" class="submit" value="Iniciar sesión" v-else />
             </div>
         </form>
         <!-- Name, Id, e-mail, bank account , phone number -->
         <form class="register-form" action="http://localhost/RegisterUser.php" method="post" @submit.prevent="registerUser" v-else>
-            <h1>REGISTER</h1>
-            <label for="id">Id (NIF, DNI, etc)</label>
-            <input type="id" name="id" id="user-id" v-model="userId" />
+            <h1>{{ languageDictionary[language].register }}</h1>
 
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" v-model="userEmail" />
+            <label for="id">{{ languageDictionary[language].id }}</label>
+            <input class="registerInput" type="id" name="id" id="user-id" v-model="userId" />
 
-            <label for="username">Name</label>
-            <input type="text" name="username" id="username" v-model="userName" />
+            <label for="email">{{ languageDictionary[language].email }}</label>
+            <input class="registerInput" type="email" name="email" id="email" v-model="userEmail" />
 
-            <label for="phone">Phone</label>
-            <input type="text" name="phone" id="phone" v-model="userPhone" />
+            <label for="username">{{ languageDictionary[language].name }}</label>
+            <input class="registerInput" type="text" name="username" id="username" v-model="userName" />
 
-            <label for="bankAccount">Bank Account</label>
-            <input type="text" name="bankAccount" id="bankAccount" v-model="userBankAccount" />
+            <label for="phone">{{ languageDictionary[language].phone }}</label>
+            <input class="registerInput" type="text" name="phone" id="phone" v-model="userPhone" />
 
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" v-model="userPassword" />
+            <label for="bankAccount">{{ languageDictionary[language].bankAccount }}</label>
+            <input class="registerInput" type="text" name="bankAccount" id="bankAccount" v-model="userBankAccount" />
+
+            <label for="password">{{ languageDictionary[language].password }}</label>
+            <input class="registerInput" type="password" name="password" id="password" v-model="userPassword" />
+
             <div class="submit-container">
-                <p @click="toggleRegister">Already registered?</p>
-                <input type="submit" class="submit" value="Register" />
+                <p @click="toggleRegister">{{ languageDictionary[language].already_registered }}</p>
+                <input type="submit" class="submit" value="Register" v-if="language === 'english'" />
+                <input type="submit" class="submit" value="Registrarse" v-else />
             </div>
         </form>
     </section>
@@ -45,24 +49,52 @@
 import { ref, Ref } from 'vue';
 import $ from 'jquery';
 
-let register: Ref<boolean> = ref(false);
+// language variable
+let language = localStorage.getItem('language');
 
-// cambiar entre login y register
+const languageDictionary = {
+    english: {
+        login: 'LOGIN',
+        register: 'REGISTER',
+        already_registered: 'Already registered?',
+        phone: 'Phone',
+        bankAccount: 'Bank Account',
+        id: 'Id',
+        email: 'Email',
+        name: 'Name',
+        password: 'Password',
+    },
+    spanish: {
+        login: 'Iniciar sesión',
+        register: 'Registrarse',
+        already_registered: '¿Ya estás registrado?',
+        phone: 'Telefono',
+        bankAccount: 'Cuenta bancaria',
+        id: 'DNI',
+        email: 'Correo',
+        name: 'Nombre',
+        password: 'Contraseña',
+    },
+};
+
+// user data variables for login and register
+let userId: Ref<string> = ref('');
+let userName: Ref<string> = ref('');
+let userEmail: Ref<string> = ref('');
+let userPassword: Ref<string> = ref('');
+let userPhone: Ref<string> = ref('');
+let userBankAccount: Ref<string> = ref('');
+
+// Switch between login and register logic
+let register: Ref<boolean> = ref(false);
 function toggleRegister() {
     register.value = !register.value;
 }
 
-let userName: Ref<string> = ref('');
-let userEmail: Ref<string> = ref('');
-let userPassword: Ref<string> = ref('');
-let userId: Ref<string> = ref('');
-let userPhone: Ref<string> = ref('');
-let userBankAccount: Ref<string> = ref('');
-
-// registrar usuario mediante ajax
+// register user
 function registerUser() {
     $.ajax({
-        url: 'http://localhost/RegisterUser.php',
+        url: 'http://localhost/pcnomponentes/database/RegisterUser.php',
         type: 'POST',
         data: {
             userName: userName.value,
@@ -73,17 +105,21 @@ function registerUser() {
             userId: userId.value,
         },
         success: function (response) {
-            // Handle successful response
-            alert('Usuario creado');
+            if (response === 'true') {
+                alert('Usuario insertado correctamente.');
+            } else {
+                const inputs = $('.registerInput');
+                $(inputs).css('border-color', 'red');
+                alert('Error al insertar usuario.');
+            }
         },
         error: function (error) {
-            // Handle error
             console.error('Error:', error);
         },
     });
 }
 
-// loguearse
+// login user
 function logUser() {
     $.ajax({
         url: 'http://localhost/pcnomponentes/database/LogUser.php',
@@ -123,8 +159,6 @@ function logUser() {
     gap: 1rem;
     border-radius: 15px;
     text-align: justify;
-    /* background-color: #f5f5f5; */
-    /* border: 1px solid black; */
 }
 
 h1 {
@@ -143,7 +177,6 @@ h1 {
     padding: 0rem 2.5rem;
     gap: 1rem;
     border-radius: 8px;
-    /* border: 1px solid #cccccc; */
 }
 
 form input {
@@ -156,8 +189,6 @@ form input {
 
 form input:focus {
     outline: none;
-    /* border: 1px solid #0d74f3;
-    background-color: white; */
 }
 
 .container .register-form {
@@ -168,7 +199,6 @@ form input:focus {
     gap: 0.5rem;
     width: fit-content;
     height: fit-content;
-    /* border: 1px solid red; */
 }
 .container .register-form h1 {
     grid-column: span 2;
@@ -191,7 +221,6 @@ form input:focus {
     margin-top: auto;
     justify-content: space-between;
     grid-column: span 2;
-    /* border: 1px solid red; */
 }
 
 .submit-container p {
