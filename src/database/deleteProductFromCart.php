@@ -10,7 +10,7 @@
     $database = 'pcnomponentes';
     $password = 'jack';
 
-    // Conectar a la base de datos
+
     $conexion = new mysqli($conection, $user, $password, $database);
 
 
@@ -18,7 +18,6 @@
     $userId = $_POST['userId'];
     $productId = $_POST['productId'];
 
-    // Verificar conexión
     if ($conexion->connect_error) {
         die('Failed to connect: ' . $conexion->connect_error);
     };
@@ -28,7 +27,6 @@
     $query->bind_param("si",  $userId, $productId);
 
 
-    // Ejecutar la consulta
     if ($query->execute()) {
         if ($conexion) {
             echo "Producto borrado correctamente";
@@ -38,7 +36,6 @@
     };
 
 
-    // Cerrar conexión
     $conexion->close();
 
 ?>

@@ -5,9 +5,9 @@
         <p class="price" v-if="props.price">{{ price * quantity !== 0 ? (price * quantity).toFixed(2) : 0 }} €</p>
 
         <div class="counter">
-            <span class="decrement" @click="decrement">-</span>
+            <span class="decrement" @click="decrement"><img src="../assets/minus.svg" alt="-" /></span>
             <span>{{ quantity }}</span>
-            <span class="increment" @click="increment">+</span>
+            <span class="increment" @click="increment"><img src="../assets/plus.svg" alt="+" /></span>
         </div>
         <img class="delete" src="../assets/x.svg" v-if="props.id" @click="deleteProductFromCart(props.id, $event)" />
     </div>
@@ -134,8 +134,23 @@ p {
 
 .decrement,
 .increment {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    text-align: justify;
+}
+
+.decrement img,
+.increment img {
+    width: 1rem;
+}
+.decrement img:hover,
+.increment img:hover {
+    filter: brightness(0) saturate(100%) invert(31%) sepia(100%) saturate(3988%) hue-rotate(141deg) brightness(95%) contrast(103%);
+}
+.decrement img:active,
+.increment img:active {
+    scale: 0.9;
 }
 
 .delete {

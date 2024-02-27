@@ -2,7 +2,7 @@
     <MyDashboard @toggle-register="toggleRegister" @toggle-about-us="toggleAboutUs" @toggle-cart="toggleCart" @toggle-products="toggleProducts" />
     <AppCarousel @toggle-products="toggleProducts" />
     <AppAboutUs v-if="appAboutUsState" />
-    <AppProducts v-if="appProductsState" />
+    <AppProducts v-if="appProductsState" @toggle-login="toggleRegister" />
     <AppLogin v-if="appRegisterState" />
     <AppCarrito v-if="appCartState" />
     <AppFooter />

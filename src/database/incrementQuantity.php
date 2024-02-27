@@ -10,16 +10,13 @@
     $database = 'pcnomponentes';
     $password = 'jack';
 
-    // Conectar a la base de datos
     $conexion = new mysqli($conection, $user, $password, $database);
 
 
     $product = $_POST['productId'];
     $quantity = $_POST['quantity'];
     $userId = $_POST['userId'];
-    // $language = $_POST['language'];
 
-    // Verificar conexión
     if ($conexion->connect_error) {
         die('Failed to connect: ' . $conexion->connect_error);
     }
@@ -32,7 +29,6 @@
     $query->bind_param("isi", $quantity, $userId, $product);
 
 
-    // Ejecutar la consulta
     if ($query->execute()) {
         if ($conexion->affected_rows > 0) {
             echo "Producto agregado al carrito";
@@ -44,7 +40,6 @@
 
 
 
-    // Cerrar conexión
     $conexion->close();
 
 ?>

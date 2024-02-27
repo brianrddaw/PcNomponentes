@@ -1,5 +1,5 @@
 <template>
-    <section class="container">
+    <section class="container" v-if="language === 'english' || language === 'spanish'">
         <img class="product-img" src="../../assets/grafica.webp" alt="" />
         <div>
             <p class="product-title" v-if="productsArray.length > 0">{{ productsArray[0].title }}</p>
@@ -11,17 +11,33 @@
         <div class="product-footer">
             <p class="product-price" v-if="productsArray.length > 0">{{ productsArray[0].price }} €</p>
 
-            <button class="add-to-cart" @click="addProductToCart()" v-if="language === 'english'">Add to cart</button>
-            <button class="add-to-cart" @click="addProductToCart()" v-else>Añadir al carrito</button>
+            <button class="add-to-cart" @click="addProductToCart()">{{ languageDictionary[language]['Add to cart'] }}</button>
         </div>
     </section>
 </template>
 
 <script lang="ts" setup>
 import $ from 'jquery';
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 
+// variables we'll need
 let language = localStorage.getItem('language');
+let logStatus = localStorage.getItem('logStatus');
+
+const languageDictionary = {
+    english: {
+        'Add to cart': 'Add to cart',
+    },
+    spanish: {
+        'Add to cart': 'Añadir al carrito',
+    },
+};
+
+// switch to login section logic
+const emit = defineEmits(['toggle-login']);
+const toggleLogin = () => {
+    emit('toggle-login', true);
+};
 
 // The Product interface defines the structure of a product object with properties id, title, title_en, description, description_en, and price.
 // Each property has a specific data type: id is a number, title and title_en are strings, description and description_en are strings, and price is a number.
@@ -56,6 +72,10 @@ $(document).ready(function () {
 
 // This code defines a function called addProductToCart that sends an AJAX request to the server to add a product to the cart. It uses the product name, quantity, userId, and language as parameters.
 function addProductToCart() {
+    if (logStatus === 'false') {
+        toggleLogin();
+        return;
+    }
     let product = $('.product-title').text();
     let userId = localStorage.getItem('userId');
     let language = localStorage.getItem('language');
@@ -64,13 +84,6 @@ function addProductToCart() {
         url: 'http://localhost/pcnomponentes/database/AddProductToCart.php',
         type: 'POST',
         data: { product: product, quantity: 1, userId: userId, language: language },
-        success: function (response) {
-            if (language === 'english') {
-                alert('Product added to cart');
-            } else {
-                alert('Producto agregado al carrito');
-            }
-        },
     });
 }
 </script>
@@ -146,7 +159,25 @@ function addProductToCart() {
     transition: all 0.2s ease-in-out;
 }
 
-.product-footer button:active {
-    scale: 0.98;
+.product-footer button:focus {
+    animation: addedToCart 0.5s ease-in-out;
+}
+
+@keyframes addedToCart {
+    0% {
+        scale: 1;
+    }
+    50% {
+        scale: 0.9;
+        border: 1px solid transparent;
+        background-color: #00913f;
+        color: white;
+    }
+    100% {
+        scale: 1;
+        border: 1px solid transparent;
+        background-color: #00913f;
+        color: white;
+    }
 }
 </style>
