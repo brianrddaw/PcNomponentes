@@ -19,22 +19,22 @@
             <h1>{{ languageDictionary[language].register }}</h1>
 
             <label for="id">{{ languageDictionary[language].id }}</label>
-            <input class="registerInput" type="id" name="id" id="user-id" v-model="userId" />
+            <input class="registerInput" type="id" name="dni" id="user-id" v-model="userId" @keyup="validateField($event)" />
 
             <label for="email">{{ languageDictionary[language].email }}</label>
-            <input class="registerInput" type="email" name="email" id="email" v-model="userEmail" />
+            <input class="registerInput" type="email" name="email" id="email" v-model="userEmail" @keyup="validateField($event)" />
 
             <label for="username">{{ languageDictionary[language].name }}</label>
-            <input class="registerInput" type="text" name="username" id="username" v-model="userName" />
+            <input class="registerInput" type="text" name="username" id="username" v-model="userName" @keyup="validateField($event)" />
 
             <label for="phone">{{ languageDictionary[language].phone }}</label>
-            <input class="registerInput" type="text" name="phone" id="phone" v-model="userPhone" />
+            <input class="registerInput" type="text" name="phone" id="phone" v-model="userPhone" @keyup="validateField($event)" />
 
             <label for="bankAccount">{{ languageDictionary[language].bankAccount }}</label>
-            <input class="registerInput" type="text" name="bankAccount" id="bankAccount" v-model="userBankAccount" />
+            <input class="registerInput" type="text" name="bankAccount" id="bankAccount" v-model="userBankAccount" @keyup="validateField($event)" />
 
             <label for="password">{{ languageDictionary[language].password }}</label>
-            <input class="registerInput" type="password" name="password" id="password" v-model="userPassword" />
+            <input class="registerInput" type="password" name="password" id="password" v-model="userPassword" @keyup="validateField($event)" />
 
             <div class="submit-container">
                 <p @click="toggleRegister">{{ languageDictionary[language].already_registered }}</p>
@@ -49,13 +49,46 @@
 import { ref, Ref } from 'vue';
 import $ from 'jquery';
 
+// Regex we' ll use
+const regEx: any = {
+    username: /^[A-Z][a-z]{2,}$/,
+    dni: /^\d{8}[A-HJ-NP-TV-Z]$/,
+    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    phone: /^[6789]\d{8}$/,
+    bankAccount: /^[A-Z]{2}\d{2}[A-Za-z0-9]{4}\d{7}([A-Za-z0-9]?){0,16}$/,
+    password: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~])[A-Za-z\d!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]{12,}$/,
+};
+
+// validateFields function
+function validateField(e: any) {
+    if (regEx[e.target.name].test(e.target.value)) {
+        e.target.classList.add('valid');
+        e.target.classList.remove('invalid');
+    } else {
+        e.target.classList.add('invalid');
+        e.target.classList.remove('valid');
+    }
+}
+
+// validateForm function
+function validateForm(): Boolean {
+    const inputs = $('.registerInput');
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].classList.contains('invalid')) {
+            alert('Please fill all the fields correctly');
+            return false;
+        }
+    }
+    return true;
+}
+
 // language variable
 let language = localStorage.getItem('language');
 
 const languageDictionary = {
     english: {
         login: 'LOGIN',
-        register: 'REGISTER',
+        register: 'Register',
         already_registered: 'Already registered?',
         phone: 'Phone',
         bankAccount: 'Bank Account',
@@ -65,10 +98,10 @@ const languageDictionary = {
         password: 'Password',
     },
     spanish: {
-        login: 'Iniciar sesión',
+        login: 'INICIAR SESIÓN',
         register: 'Registrarse',
         already_registered: '¿Ya estás registrado?',
-        phone: 'Telefono',
+        phone: 'Teléfono',
         bankAccount: 'Cuenta bancaria',
         id: 'DNI',
         email: 'Correo',
@@ -93,6 +126,9 @@ function toggleRegister() {
 
 // register user
 function registerUser() {
+    if (!validateForm()) {
+        return;
+    }
     $.ajax({
         url: 'http://localhost/pcnomponentes/database/RegisterUser.php',
         type: 'POST',
@@ -204,15 +240,21 @@ form input:focus {
     grid-column: span 2;
 }
 
-.container .register-form input {
+.resgisterInput,
+.submit {
     max-height: 80%;
+    min-width: fit-content;
     width: 300px;
-    border: 1px solid transparent;
+    border: 1px solid #f5f5f5;
 }
 
-.container .register-form input:hover,
-.container .register-form input:focus {
-    border: 1px solid #0d74f3;
+/* validated inputs */
+.valid {
+    border: 1px solid green;
+}
+
+.invalid {
+    border: 1px solid red;
 }
 
 .submit-container {
